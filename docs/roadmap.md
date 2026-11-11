@@ -239,6 +239,15 @@ Lo que hay que cuidar:
 - **El plan gratuito.** Suele pausar los proyectos sin actividad y limitar almacenamiento y usuarios: revisar las condiciones vigentes.
 - **Pruebas.** Sin red o sin cuenta, el juego y sus pruebas siguen funcionando con `localStorage`.
 
+### Ideas anotadas: funciones y archivos fuera del sitio
+
+Sin decidir; para retomar cuando llegue esta fase. Los planes gratuitos cambian: confirmar sus condiciones antes de elegir.
+
+- **No hace falta un servidor propio.** Entrar, guardar la partida y las estadísticas propias se resuelven desde el navegador con reglas por fila. Solo piden código de servidor las tablas con algún control contra trampas y las tareas con llaves secretas: una o dos funciones.
+- **Dónde irían esas funciones.** Funciones del mismo servicio de datos (lo más simple), o funciones en el borde del proveedor que aloje los archivos. Algunos planes gratuitos de funciones son solo para uso personal y no comercial.
+- **Modelos y audio en un almacén de objetos sin cobro por transferencia** (R2 de Cloudflare es el candidato). Pide una base de recursos configurable al compilar, con el propio sitio como respaldo para que en local nada cambie (hoy `MODEL_BASE` sale de `BASE_URL`), CORS y caché larga con nombres versionados, y un paso de subida en el despliegue.
+- **Cuidados.** Los modelos sin permiso de redistribución que excluye `.gitignore` tampoco van a un almacén público; los WAV de Git LFS se suben como audio real, no como punteros; los secretos viven en el panel del servicio, nunca en el repositorio.
+
 ### Orden
 
 | Rama | Contenido |

@@ -205,6 +205,51 @@ El juego tiene hoy una regla: **El Chato es el único perro**, y su amistad y ap
 - **Modelos.** Un accesorio distintivo por personaje, piezas del cambuche, la báscula de la bodega nueva, el plato y la cobija del Chato. Una sola malla por accesorio, material compartido, sin marcas ni logos.
 - Cada objeto nuevo lleva icono y fila en `docs/iconos.md`, y cada texto usa caracteres que existan en la letra.
 
+## Fase 3. Sitio, cuentas y estadísticas
+
+El juego hoy no necesita servidor: se publica como sitio estático (`.github/workflows/pages.yml`) y la partida vive en `localStorage`. Esa base se conserva: **sin cuenta se juega igual**, y la cuenta solo añade.
+
+### Alojamiento
+
+| Opción | A favor | En contra |
+|---|---|---|
+| GitHub Pages (el de hoy) | Ya funciona, sin costo, despliega con cada fusión | Límite de 1 GB por sitio y de ancho de banda mensual; `dist/` pesa 330 MB |
+| Otro alojamiento estático gratuito | Más ancho de banda y dominio propio | Algunos limitan el tamaño por archivo a 25 MB; `dist/` tiene hoy 3 archivos mayores |
+
+Lo primero, en cualquier caso, es adelgazar `dist/` retirando los ~300 MB de modelos que el juego no carga (ver «Peso del despliegue»). Con eso basta GitHub Pages por un buen tiempo. Los límites de cada servicio cambian: confirmarlos antes de elegir.
+
+### Cuentas y datos
+
+Un servicio con base de datos y autenticación en su plan gratuito (Supabase es el candidato) cubre lo que se quiere sin escribir servidor: el navegador habla con él directamente.
+
+| Función | Qué hace | Riesgo |
+|---|---|---|
+| Entrar con GitHub | Identifica al jugador; opcional | Bajo |
+| Partida en la nube | Copia del guardado para seguir en otro equipo | Decidir qué copia gana si difieren |
+| Estadísticas propias | Días sobrevividos, final alcanzado, plata reciclada, causa de cada muerte | Bajo |
+| Tablas del sector | Quién ha durado más, finales más vistos | Trampas: todo se calcula en el navegador |
+| Página del proyecto | Presentación, capturas, colaboradores, enlace a jugar | Ninguno |
+
+Lo que hay que cuidar:
+
+- **Llaves.** En el navegador solo va la llave pública; cada tabla lleva reglas por fila para que cada quien escriba solo lo suyo. Ninguna llave de servicio entra al repositorio.
+- **Trampas.** El juego corre entero en el cliente, así que cualquier cifra enviada se puede falsear. Las tablas son un adorno entre amigos, no una competencia; no se dan premios por ellas.
+- **Datos personales.** Guardar solo el identificador de la cuenta y el nombre público; avisar qué se guarda y permitir borrarlo.
+- **Tono.** Nada de tablas ni cuentas sobre muertes por limpieza social.
+- **El plan gratuito.** Suele pausar los proyectos sin actividad y limitar almacenamiento y usuarios: revisar las condiciones vigentes.
+- **Pruebas.** Sin red o sin cuenta, el juego y sus pruebas siguen funcionando con `localStorage`.
+
+### Orden
+
+| Rama | Contenido |
+|---|---|
+| `chore/dist-liviano` | Retirar de `dist/` los modelos sin uso |
+| `feat/sitio` | Página de presentación con enlace a jugar |
+| `feat/cuenta-github` | Entrar con GitHub y partida en la nube, opcional |
+| `feat/estadisticas` | Estadísticas propias y tablas del sector |
+
+Va después del primer acto de la historia: las estadísticas valen más cuando hay finales y decisiones que contar.
+
 ## Orden de entrega
 
 | # | Rama | Contenido | Tamaño |
@@ -231,3 +276,4 @@ Los pasos 2 a 5 no cambian lo que se juega; del 6 en adelante cada rama deja el 
 2. Si la historia tiene final con modo libre después, como se propone, o queda abierta.
 3. Mascota: el Chato con oficio, o cambiar la regla para una segunda.
 4. Qué hacer con el Metro y con la huida por olor, junto con sus autores.
+5. Quién es dueño del proyecto de datos y del dominio, y si las tablas del sector son públicas.
